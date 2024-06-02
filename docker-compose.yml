@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  backup:
+    image: busybox:latest
+    command: sh -c "cp -r /from_volume /backup"
+    volumes:
+      - app_volume:/from_volume
+      - /backup:./backup
+
+  app:
+    #... your image settings and options here
+    volumes:
+      - app_volume:/app/data
+    depends_on:
+      backup:
+        condition: service_completed_successfully
+
+volumes:
+  app_volume:
+
+
